@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     int substr_size = strlen(substr);
     int size = 30;
 
-    if(strcmp(argv[0], "./fsmatcher") == 0) {
+    if((strcmp(argv[0], "./fsmatcher") == 0) || (strcmp(argv[0], "./fs-gdb") == 0)) {
         pathfind(argv[2], substr_size, size, substr);
     } else {
         printf("Wrong argument\n");

@@ -26,37 +26,30 @@ void open_txt(char* path, char* substr, int size, int substr_size)
 
 void pathfind(char* pathname, int substr_size, int size, char* substr)
 {
-    DIR* d;
+    DIR *d;
     d = opendir(pathname);
-    if (!pathname) {
-        printf("Can't open directory %s\n", pathname);
-        perror("Error: ");
-        return;
-    }
-    while(1) {
-        struct dirent *inc;
-        const char* d_name;
-        inc = readdir(d);
-        /*if (!inc) {
-            break;
-        }*/
-        d_name = inc->d_name;
+    struct dirent *entry;
+    char* d_name = entry->d_name;
+    while ((entry = readdir(d)) != NULL) {
         int ln = strlen(d_name);
         if (d_name[ln - 1] == 't' && d_name[ln - 2] == 'x' && d_name[ln - 3] == 't') {
             printf("%s/%s\n", pathname, d_name);
-            char addlen[50];//dinamic massive!!
+            char addlen[50];
             strcpy(addlen, pathname);
             ln = strlen(addlen);
             addlen[ln + 1] = '/';
-            ln = strlen(d_name);
+    /*if (!pathname) {
+        printf("Can't open directory %s\n", pathname);
+        perror("Error: ");
+        return;
+    }*/
             strcat(addlen, d_name);
             ln = strlen(addlen);
             addlen[ln + 1] = '\0';
             open_txt(addlen, substr, size, substr_size);
+            entry = readdir(d);
         }
-        if(closedir(d)) {
-            printf("Couldn't close\n");
-        }
+        closedir(d);
     }
 }
 
