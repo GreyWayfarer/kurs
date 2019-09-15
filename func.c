@@ -119,6 +119,7 @@ void search(char* path, char* substr, int size, int substr_size)
 
 void open_txt(char* path, char* substr, int substr_size, int size)
 {
+    printf("%s\n", path);
     FILE *content = fopen(path, "r");
     if (content == NULL) {
         perror("Error: ");
@@ -144,33 +145,66 @@ void open_txt(char* path, char* substr, int substr_size, int size)
 
 void pathfind(char *substr, char *path, int substr_size, int size) {
     DIR* d;
-    d = opendir(substr);
-    if (!substr) {
+    struct dirent *fold;
+    const char* d_name;
+    unsigned int ln;
+    //d = opendir(substr);
+    if ((d = opendir(substr)) != NULL) {
+        /*while(1) {        
+            fold = readdir(d);
+            d_name = fold->d_name;
+            unsigned int ln = slen(d_name);
+            if (d_name[ln - 4] == '.' && d_name[ln - 3] == 't' && d_name[ln - 2] == 'x' && d_name[ln - 1] == 't') {
+                char addname[50];
+                scpy(addname, substr);
+                ln = slen(addname);
+                addname[ln + 1] = '/';
+                strcat(addname, d_name);
+                ln = slen(addname);
+                addname[ln + 1] = '\0';
+                open_txt(addname, substr, substr_size, size);
+            }
+            if(closedir(d) == 0) {
+                printf("Couldn't close\n");
+                perror("");
+            }
+        }*/
+        while((fold = readdir(d)) != NULL) { //test iteration, view all files
+            ln = slen(fold->d_name);
+            d_name = fold->d_name;
+            //printf("%d\n", ln);
+            //printf("%c\n", d_name[ln - 1]);
+            for (;;) {
+            if(d_name[ln - 1] == 't') {
+                if(d_name[ln - 2] == 'x') {
+                    if(d_name[ln - 3] == 't') {
+                        printf("txt - %s\n", fold->d_name);
+                        char addname[50];
+                	scpy(addname, substr);
+                	ln = slen(addname);
+                	addname[ln + 1] = '/';
+			addname[ln + 2] = '\0';
+                        printf("%s\n", addname);//check
+                	strcat(addname, d_name);
+                	ln = slen(addname);
+                	addname[ln + 1] = '\0';
+                	open_txt(addname, substr, substr_size, size);
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+            }
+        }
+        closedir(d); //end
+    } else {
         printf("Can't open directory %s\n", substr);
-        perror("Error: ");
+        perror("");
         return;
     }
-    for(;;) {
-        struct dirent *fold;
-        const char* d_name;
-        fold = readdir(d);
-        d_name = fold->d_name;
-        unsigned int ln = slen(d_name);
-        if (d_name[ln - 4] == '.' && d_name[ln - 3] == 't' && d_name[ln - 2] == 'x' && d_name[ln - 1] == 't') {
-            char addname[50];
-            scpy(addname, substr);
-            ln = slen(addname);
-            addname[ln + 1] = '/';
-            strcat(addname, d_name);
-            ln = slen(addname);
-            addname[ln + 1] = '\0';
-            open_txt(addname, substr, substr_size, size);
-        }
-        if(closedir(d) == 0) {
-            printf("Couldn't close\n");
-            perror("Error: ");
-        }
-    }
-    
 }
 
