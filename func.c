@@ -14,6 +14,7 @@ unsigned int slen(const char *s) {
 
 short int scmp(const char *cs, const char *ct) {
     char c1, c2;
+
     while (1) {
         c1 = *cs++;
         c2 = *ct++;
@@ -42,13 +43,14 @@ unsigned int hash(char w)
     return h % HASH_SIZE;
 }
 
-void search(char* path, char* substr, int size, int substr_size)
+void search(char* buf, char* substr, int size, int substr_size)
 {
-    int ln = strlen(path);
+    int ln = strlen(buf);
     int d[substr_size][size];
     int i, j, temp, r;
     char tmp;
 
+    printf("this if buf - %s\n", buf);
     r = hash('*');
     for(i = 0; i < substr_size; i++) {
         for(j = 0; j < size; j++) {
@@ -95,7 +97,7 @@ void search(char* path, char* substr, int size, int substr_size)
     }
     int k = 0;
     for(j = 0; j < ln; j++) {
-        tmp = path[j];
+        tmp = buf[j];
         temp = hash(tmp);
         i = d[i][temp];
         if(i == 1) {
@@ -109,7 +111,7 @@ void search(char* path, char* substr, int size, int substr_size)
             printf("\nFind %d mathes\n", k + 1);
             int ex = k;
             while(ex <= k) {
-                printf("%c", path[ex]);
+                printf("%c", buf[ex]);
                 ex +=1;
             }
             printf("\n");
@@ -139,7 +141,8 @@ void open_txt(char* path, char* substr, int substr_size, int size)
     /*if((fclose(content)) && (content)) {
         printf("Couldn't close file\n");
     }*/
-    search(path, substr, size, substr_size);
+    printf("%s", buf);
+    search(buf, substr, size, substr_size);
     return;
 }
 
@@ -179,11 +182,12 @@ void pathfind(char *substr, char *path, int substr_size, int size) {
                 if(d_name[ln - 2] == 'x') {
                     if(d_name[ln - 3] == 't') {
                         printf("txt - %s\n", fold->d_name);
-                        char addname[50];
+                        char addname[80];
                 	scpy(addname, substr);
                 	ln = slen(addname);
-                	addname[ln + 1] = '/';
-			addname[ln + 2] = '\0';
+                        printf("%d\n", ln);
+                	/*addname[ln + 1] = '/';
+			addname[ln + 2] = '\0';*/
                         printf("%s\n", addname);//check
                 	strcat(addname, d_name);
                 	ln = slen(addname);
