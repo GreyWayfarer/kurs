@@ -45,12 +45,38 @@ unsigned int hash(char w)
 
 void search(char* buf, char* substr, int size, int substr_size)
 {
-    int ln = strlen(buf);
-    int d[substr_size][size];
-    int i, j, temp, r;
+    int ln = slen(buf);
+    //int d[substr_size][size];
+    int i, j, temp, r, d = 0;
     char tmp;
+    int pref = slen(substr);
+    printf("this if buf - %s/end buf\n", buf);//buf's check
+    printf("Substr_size = %d\n", pref);
+    printf("ln = %d\n", ln);
 
-    printf("this if buf - %s\n", buf);
+    
+
+    for (j = 0; j < substr_size; j++) {
+    for(i = 0; i < pref - 1; i++) {
+        while (k != r) {
+            if (buf[i] == substr[i]) {
+                d++;
+            } else {
+                d--;
+            }
+        }
+        k++;
+    }
+    }
+    printf("d = %d\n", d);
+    if (d + 1 == pref) {
+        printf("Coincidence was found out: %s\n", substr);
+        return;
+    } else {//not a suffix auto
+        perror("Sins (exactly) to be ");
+    }
+
+ /*   
     r = hash('*');
     for(i = 0; i < substr_size; i++) {
         for(j = 0; j < size; j++) {
@@ -116,10 +142,10 @@ void search(char* buf, char* substr, int size, int substr_size)
             }
             printf("\n");
         }
-    }
+    }*/
 }
 
-void open_txt(char* path, char* substr, int substr_size, int size)
+void open_txt(char* path, char* pref, int substr_size, int size)
 {
     printf("%s\n", path);
     FILE *content = fopen(path, "r");
@@ -142,7 +168,7 @@ void open_txt(char* path, char* substr, int substr_size, int size)
         printf("Couldn't close file\n");
     }*/
     printf("%s", buf);
-    search(buf, substr, size, substr_size);
+    search(buf, pref, size, substr_size);
     return;
 }
 
@@ -192,7 +218,7 @@ void pathfind(char *substr, char *path, int substr_size, int size) {
                 	strcat(addname, d_name);
                 	ln = slen(addname);
                 	addname[ln + 1] = '\0';
-                	open_txt(addname, substr, substr_size, size);
+                	open_txt(addname, path, substr_size, size);
                     } else {
                         break;
                     }
