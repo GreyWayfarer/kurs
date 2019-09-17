@@ -12,8 +12,6 @@
 
 unsigned int slen(const char *s);
 
-unsigned int slon(const char *s);
-
 short int scmp(const char *cs, const char *ct);
 
 char *scpy(char *destination, const char *src);

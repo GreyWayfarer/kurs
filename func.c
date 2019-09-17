@@ -12,18 +12,6 @@ unsigned int slen(const char *s) {
     return sc - s;
 }
 
-unsigned int slon(const char *s) {
-    const char *sc = s;
-    int k = 0; 
-    while (*sc != '\0') {
-        ++sc;
-        if (*sc != '\n') {
-        k++;    
-        }
-    }
-    return sc - s - k;
-}
-
 short int scmp(const char *cs, const char *ct) {
     char c1, c2;
 
@@ -58,37 +46,24 @@ unsigned int hash(char w)
 void search(char* buf, char* substr)
 {
     int ln = slen(buf);
-    int i, j = 0, d, k = 0;//, f = 0;
+    int i, j = 0, k = 0;
     int pref = slen(substr);
-    //printf("this if buf - %s/end buf\n", buf);//buf's check
-    //printf("Pref = %d\n", pref);
-    //printf("ln = %d\n", ln);  
-
     while (j < ln) {
-        d = 0;
-        for(i = 0; i < pref; i++) {         
-            //printf("i = %d\n", i);
-            //printf("buf[j] = %c\n", buf[j]);
-	    //printf("substr[i] = %c\n", substr[i]);
-            if (substr[i] == '*') {//&& (f == 0)) {
+        for(i = 0; i < pref; i++) {
+            if (substr[i] == '*') {
                 while (buf[j] != substr[i + 1]) {
                     j++;
                 }
-                d++;
-                //f = 1;
             }
             if (buf[j] == substr[i]) {
-                d++;
                 j++;
-                //printf("d = %d\n", d);
-                if (d == pref) {
+                if (i == pref - 1) {
                     ++k;
                 }
-                //printf("k = %d\n", k);
             } else if (substr[i] != '*') {
                 j++;
                 break;
-            }    
+            }
         }
     }
     printf("%d Coincidence(s) was found out: %s\n", k, substr);
@@ -134,10 +109,6 @@ void pathfind(char *substr, char *path) {
                         char addname[80];
                 	scpy(addname, substr);
                 	ln = slen(addname);
-                        //printf("%d\n", ln);
-                	/*addname[ln + 1] = '/';
-			addname[ln + 2] = '\0';*/
-                        //printf("%s\n", addname);//check
                 	strcat(addname, d_name);
                 	ln = slen(addname);
                 	addname[ln + 1] = '\0';
