@@ -58,7 +58,7 @@ unsigned int hash(char w)
 void search(char* buf, char* substr)
 {
     int ln = slen(buf);
-    int i, j = 0, d, k = 0;
+    int i, j = 0, d, k = 0;//, f = 0;
     int pref = slen(substr);
     //printf("this if buf - %s/end buf\n", buf);//buf's check
     //printf("Pref = %d\n", pref);
@@ -70,6 +70,13 @@ void search(char* buf, char* substr)
             //printf("i = %d\n", i);
             //printf("buf[j] = %c\n", buf[j]);
 	    //printf("substr[i] = %c\n", substr[i]);
+            if (substr[i] == '*') {//&& (f == 0)) {
+                while (buf[j] != substr[i + 1]) {
+                    j++;
+                }
+                d++;
+                //f = 1;
+            }
             if (buf[j] == substr[i]) {
                 d++;
                 j++;
@@ -78,10 +85,10 @@ void search(char* buf, char* substr)
                     ++k;
                 }
                 //printf("k = %d\n", k);
-            } else {
+            } else if (substr[i] != '*') {
                 j++;
                 break;
-            }     
+            }    
         }
     }
     printf("%d Coincidence(s) was found out: %s\n", k, substr);
