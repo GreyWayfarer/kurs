@@ -55,161 +55,40 @@ unsigned int hash(char w)
     return h % HASH_SIZE;
 }
 
-void search(char* buf, char* substr, int size, int substr_size)
+void search(char* buf, char* substr)
 {
     int ln = slen(buf);
-    //int d[substr_size][size];
-    int i, j = 0, temp, r, d, k = 0;
-    char tmp;
+    int i, j = 0, d, k = 0;
     int pref = slen(substr);
-    printf("this if buf - %s/end buf\n", buf);//buf's check
-    printf("Pref = %d\n", pref);
-    printf("ln = %d\n", ln);
+    //printf("this if buf - %s/end buf\n", buf);//buf's check
+    //printf("Pref = %d\n", pref);
+    //printf("ln = %d\n", ln);  
 
-/*char table[ln];
-table[0] = 0;
-for (j = 1; j < pref; j++) {
-    while ((k > 0) && (substr[k] != buf[j])) {
-        k = table[k - 1] + 1;
-        if (substr[k] == buf[j]) {
-            k++;
-        }
-    table[j] = k - 1;    
-    }
-}
-        
-
-for (i = 0; i < ln; i++) {
-    while ((j > 0) && (substr[j] != buf[i])) {
-        j = table[j - 1] + 1;
-        if (substr[j] == buf[i]) {
-            j++;
-        }
-        if (j == pref + 1) {
-            printf("Coincidence\n");
-        }
-    }
-}
-*/
-    
-
-    while (j < ln) /*for (j = 0; j < ln; j++)*/ {
+    while (j < ln) {
         d = 0;
-        for(i = 0; i < pref; i++) {
-            /*while ((d + 1 != pref) && (d >= 0)) {
-                if (buf[i] == substr[i]) {
-                    d++;
-                } else {
-                    d--;
-                }
-            }
-            if (d>=0) {
-                k++;
-            } else {
-                k--;
-            }
-        }
-        if (d>0) {
-            j = j + pref;
-        } else {
-            j++;
-        }*/
-            printf("i = %d\n", i);
-            printf("buf[j] = %c\n", buf[j]);
-	    printf("substr[i] = %c\n", substr[i]);
+        for(i = 0; i < pref; i++) {         
+            //printf("i = %d\n", i);
+            //printf("buf[j] = %c\n", buf[j]);
+	    //printf("substr[i] = %c\n", substr[i]);
             if (buf[j] == substr[i]) {
                 d++;
                 j++;
-                printf("d = %d\n", d);
+                //printf("d = %d\n", d);
                 if (d == pref) {
                     ++k;
                 }
-                printf("k = %d\n", k);
+                //printf("k = %d\n", k);
             } else {
                 j++;
                 break;
             }     
         }
-        //j = j + d;
     }
     printf("%d Coincidence(s) was found out: %s\n", k, substr);
         return;
-    //printf("d = %d\n", d);
-    //if (d + 1 == pref) {
-        
-    /*} else {//not a suffix auto
-        perror("Sins (exactly) to be ");
-    }*/
-
-    /* r = hash('*');
-    for(i = 0; i < substr_size; i++) {
-        for(j = 0; j < size; j++) {
-            d[i][j] = 0;
-        }
-    }
-
-    for(i = 0; i < substr_size; i++) {
-        tmp = substr[i];
-        if(tmp == '?') {
-            for(j = 0; j < size; j++) {
-                d[i][j] = i + 1;
-            }
-            d[i][r] = 0;
-        } else {
-              temp = hash(tmp);
-              j = d[i][temp];
-              d[i][temp] = i + 1;
-              if (i == 0) {
-                  for (j = 0; j < substr_size; j++) {
-                      d[j][temp] = d[i][temp];
-                  }
-              }
-        }
-    }
-
-    for(i = 0; i < substr_size; i++) {
-        if(d[i][r] != 0) {
-            if((i + 1) < substr_size) {
-                for(j = 0; j < size; j++) {
-                    d[i][j] = i;
-                }
-                for(j = 0; j < size; j++) {
-                    if(d[i + 1][j] == i + 2) {
-                        d[i][j] = i + 2;
-                    }
-                }
-             } else {
-                  for (j = 0; j < size; j++) {
-                      d[i][j] = i + 1;
-                  }
-             }
-         }
-    }
-    int k = 0;
-    for(j = 0; j < ln; j++) {
-        tmp = buf[j];
-        temp = hash(tmp);
-        i = d[i][temp];
-        if(i == 1) {
-            k = j;
-        }
-        if ((i == 1) && (d[i][r] != 1)) {
-            k = j;
-        }
-        if (i == substr_size) {
-            j = 0;
-            printf("\nFind %d mathes\n", k + 1);
-            int ex = k;
-            while(ex <= k) {
-                printf("%c", buf[ex]);
-                ex +=1;
-            }
-            printf("\n");
-        }
-    }*/
 }
 
-void open_txt(char* path, char* pref, int substr_size, int size)
+void open_txt(char* path, char* pref)
 {
     printf("%s\n", path);
     FILE *content = fopen(path, "r");
@@ -228,50 +107,23 @@ void open_txt(char* path, char* pref, int substr_size, int size)
     }
     buf[i] = '\0';
     fclose(content);
-    /*if((fclose(content)) && (content)) {
-        printf("Couldn't close file\n");
-    }*/
-    //printf("%s", buf);
-    search(buf, pref, size, substr_size);
+    search(buf, pref);
     return;
 }
 
-void pathfind(char *substr, char *path, int substr_size, int size) {
+void pathfind(char *substr, char *path) {
     DIR* d;
     struct dirent *fold;
     const char* d_name;
     unsigned int ln;
-    //d = opendir(substr);
     if ((d = opendir(substr)) != NULL) {
-        /*while(1) {        
-            fold = readdir(d);
-            d_name = fold->d_name;
-            unsigned int ln = slen(d_name);
-            if (d_name[ln - 4] == '.' && d_name[ln - 3] == 't' && d_name[ln - 2] == 'x' && d_name[ln - 1] == 't') {
-                char addname[50];
-                scpy(addname, substr);
-                ln = slen(addname);
-                addname[ln + 1] = '/';
-                strcat(addname, d_name);
-                ln = slen(addname);
-                addname[ln + 1] = '\0';
-                open_txt(addname, substr, substr_size, size);
-            }
-            if(closedir(d) == 0) {
-                printf("Couldn't close\n");
-                perror("");
-            }
-        }*/
-        while((fold = readdir(d)) != NULL) { //test iteration, view all files
+        while((fold = readdir(d)) != NULL) {
             ln = slen(fold->d_name);
             d_name = fold->d_name;
-            //printf("%d\n", ln);
-            //printf("%c\n", d_name[ln - 1]);
             for (;;) {
             if(d_name[ln - 1] == 't') {
                 if(d_name[ln - 2] == 'x') {
                     if(d_name[ln - 3] == 't') {
-                        //printf("txt - %s\n", fold->d_name);
                         char addname[80];
                 	scpy(addname, substr);
                 	ln = slen(addname);
@@ -282,7 +134,7 @@ void pathfind(char *substr, char *path, int substr_size, int size) {
                 	strcat(addname, d_name);
                 	ln = slen(addname);
                 	addname[ln + 1] = '\0';
-                	open_txt(addname, path, substr_size, size);
+                	open_txt(addname, path);
                         for (int i = 0; i < ln; i++) {
                             addname[ln - i] = 0;
                         }
@@ -298,10 +150,9 @@ void pathfind(char *substr, char *path, int substr_size, int size) {
             }
             }
         }
-        closedir(d); //end
+        closedir(d);
     } else {
         printf("Can't open directory %s\n", substr);
-        //perror("");
         return;
     }
 }

@@ -8,10 +8,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     if ((scmp(argv[0], "./fsmatcher") == 0) || (scmp(argv[0], "./fs-gdb") == 0)) {
-        char *substr = argv[2];
-        int substr_size = slen(substr);
-        int size = 30;
-        pathfind(argv[2], argv[1], substr_size, size);
+        pathfind(argv[2], argv[1]);
     } else {
         printf("Wrong argument\n");
         return 0;
