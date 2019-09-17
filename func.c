@@ -12,6 +12,18 @@ unsigned int slen(const char *s) {
     return sc - s;
 }
 
+unsigned int slon(const char *s) {
+    const char *sc = s;
+    int k = 0; 
+    while (*sc != '\0') {
+        ++sc;
+        if (*sc != '\n') {
+        k++;    
+        }
+    }
+    return sc - s - k;
+}
+
 short int scmp(const char *cs, const char *ct) {
     char c1, c2;
 
@@ -47,37 +59,89 @@ void search(char* buf, char* substr, int size, int substr_size)
 {
     int ln = slen(buf);
     //int d[substr_size][size];
-    int i, j, temp, r, d = 0;
+    int i, j = 0, temp, r, d, k = 0;
     char tmp;
     int pref = slen(substr);
     printf("this if buf - %s/end buf\n", buf);//buf's check
-    printf("Substr_size = %d\n", pref);
+    printf("Pref = %d\n", pref);
     printf("ln = %d\n", ln);
 
+/*char table[ln];
+table[0] = 0;
+for (j = 1; j < pref; j++) {
+    while ((k > 0) && (substr[k] != buf[j])) {
+        k = table[k - 1] + 1;
+        if (substr[k] == buf[j]) {
+            k++;
+        }
+    table[j] = k - 1;    
+    }
+}
+        
+
+for (i = 0; i < ln; i++) {
+    while ((j > 0) && (substr[j] != buf[i])) {
+        j = table[j - 1] + 1;
+        if (substr[j] == buf[i]) {
+            j++;
+        }
+        if (j == pref + 1) {
+            printf("Coincidence\n");
+        }
+    }
+}
+*/
     
 
-    for (j = 0; j < substr_size; j++) {
-    for(i = 0; i < pref - 1; i++) {
-        while (k != r) {
-            if (buf[i] == substr[i]) {
-                d++;
+    while (j < ln) /*for (j = 0; j < ln; j++)*/ {
+        d = 0;
+        for(i = 0; i < pref; i++) {
+            /*while ((d + 1 != pref) && (d >= 0)) {
+                if (buf[i] == substr[i]) {
+                    d++;
+                } else {
+                    d--;
+                }
+            }
+            if (d>=0) {
+                k++;
             } else {
-                d--;
+                k--;
             }
         }
-        k++;
+        if (d>0) {
+            j = j + pref;
+        } else {
+            j++;
+        }*/
+            printf("i = %d\n", i);
+            printf("buf[j] = %c\n", buf[j]);
+	    printf("substr[i] = %c\n", substr[i]);
+            if (buf[j] == substr[i]) {
+                d++;
+                j++;
+                printf("d = %d\n", d);
+                if (d == pref) {
+                    ++k;
+                }
+                printf("k = %d\n", k);
+            } else {
+                j++;
+                break;
+            }     
+        }
+        //j = j + d;
     }
-    }
-    printf("d = %d\n", d);
-    if (d + 1 == pref) {
-        printf("Coincidence was found out: %s\n", substr);
+    printf("%d Coincidence(s) was found out: %s\n", k, substr);
         return;
-    } else {//not a suffix auto
+    //printf("d = %d\n", d);
+    //if (d + 1 == pref) {
+        
+    /*} else {//not a suffix auto
         perror("Sins (exactly) to be ");
-    }
+    }*/
 
- /*   
-    r = hash('*');
+    /* r = hash('*');
     for(i = 0; i < substr_size; i++) {
         for(j = 0; j < size; j++) {
             d[i][j] = 0;
@@ -167,7 +231,7 @@ void open_txt(char* path, char* pref, int substr_size, int size)
     /*if((fclose(content)) && (content)) {
         printf("Couldn't close file\n");
     }*/
-    printf("%s", buf);
+    //printf("%s", buf);
     search(buf, pref, size, substr_size);
     return;
 }
@@ -207,18 +271,22 @@ void pathfind(char *substr, char *path, int substr_size, int size) {
             if(d_name[ln - 1] == 't') {
                 if(d_name[ln - 2] == 'x') {
                     if(d_name[ln - 3] == 't') {
-                        printf("txt - %s\n", fold->d_name);
+                        //printf("txt - %s\n", fold->d_name);
                         char addname[80];
                 	scpy(addname, substr);
                 	ln = slen(addname);
-                        printf("%d\n", ln);
+                        //printf("%d\n", ln);
                 	/*addname[ln + 1] = '/';
 			addname[ln + 2] = '\0';*/
-                        printf("%s\n", addname);//check
+                        //printf("%s\n", addname);//check
                 	strcat(addname, d_name);
                 	ln = slen(addname);
                 	addname[ln + 1] = '\0';
                 	open_txt(addname, path, substr_size, size);
+                        for (int i = 0; i < ln; i++) {
+                            addname[ln - i] = 0;
+                        }
+                        addname[ln + 1] = '\0';
                     } else {
                         break;
                     }
@@ -233,7 +301,7 @@ void pathfind(char *substr, char *path, int substr_size, int size) {
         closedir(d); //end
     } else {
         printf("Can't open directory %s\n", substr);
-        perror("");
+        //perror("");
         return;
     }
 }
